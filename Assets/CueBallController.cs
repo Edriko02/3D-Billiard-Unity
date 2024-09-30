@@ -16,6 +16,8 @@ public class CueBallController : MonoBehaviour
     private bool isMoving = false; // Menyimpan status pergerakan bola
     private bool isSpacePressed = false; // Menyimpan apakah tombol Space sedang ditekan
     private float currentForce = 0f; // Kekuatan sodokan saat ini
+    private bool isCharging = false; // Deklarasi variabel untuk melacak status pengisian
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +34,15 @@ public class CueBallController : MonoBehaviour
     {
         // Cek jika tombol Space ditekan
         if (Input.GetKey(KeyCode.Space))
+{
+    isCharging = true; // Set isCharging menjadi true ketika tombol Space ditekan
+    ChargeForce(); // Akumulasi kekuatan sodokan
+    }
+        else
         {
-            ChargeForce(); // Akumulasi kekuatan sodokan
+            isCharging = false; // Set isCharging menjadi false ketika Space tidak ditekan
         }
+
 
         // Jika tombol Space dilepaskan dan bola belum bergerak
         if (Input.GetKeyUp(KeyCode.Space) && isSpacePressed && !isMoving)
@@ -87,14 +95,19 @@ public class CueBallController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {
-        // Mengatur bola agar melambat saat bertabrakan
-        rb.drag = stopDrag; // Mengatur drag untuk menghentikan bola lebih cepat
-    }
+{
+    // Mengatur bola agar melambat saat bertabrakan
+    rb.drag = stopDrag; // Mengatur drag untuk menghentikan bola lebih cepat
 
-    private void OnCollisionExit(Collision collision)
-    {
-        // Reset drag setelah keluar dari tabrakan
-        rb.drag = 0f; // Kembalikan drag menjadi nol agar bola tidak melambat lebih lambat
-    }
+    // Randomisasi sedikit arah bola setelah bertabrakan
+    Vector3 randomDirection = new Vector3(
+        rb.velocity.x + Random.Range(-0.2f, 0.2f),  // Tambah variasi acak pada arah X
+        rb.velocity.y,  // Y tetap, karena kita tidak mau arah vertikal berubah
+        rb.velocity.z + Random.Range(-0.2f, 0.2f)   // Tambah variasi acak pada arah Z
+    );
+
+    // Terapkan kecepatan baru dengan arah acak
+    rb.velocity = randomDirection.normalized * rb.velocity.magnitude; // Normalisasi kecepatan agar tetap sama
+}
+
 }
