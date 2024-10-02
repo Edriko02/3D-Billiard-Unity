@@ -66,8 +66,10 @@
   <ItemGroup>
     <Compile Include="Assets\CueBallController.cs" />
     <Compile Include="Assets\Pocket.cs" />
+    <Compile Include="Assets\StickController.cs" />
     <Compile Include="Assets\Game Main.cs" />
     <Compile Include="Assets\BilliardBallController.cs" />
+    <Compile Include="Assets\AimIndicator.cs" />
     <Compile Include="Assets\BallController.cs" />
   </ItemGroup>
   <ItemGroup>
